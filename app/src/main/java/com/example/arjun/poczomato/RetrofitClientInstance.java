@@ -11,23 +11,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClientInstance {
-//https://developers.zomato.com/api/v2.1/categories
+    //https://developers.zomato.com/api/v2.1/categories
     public static final String BASE_URL = "https://developers.zomato.com/api/v2.1/";
-    public  static final String auth="8b4934620d60843ab88a5ed9f6199ab0";
+    public static final String auth = "8b4934620d60843ab88a5ed9f6199ab0";
 
     private static Retrofit retrofit;
-   private static OkHttpClient.Builder builder=new OkHttpClient.Builder();
+    private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
 
-    public  static Retrofit getRetrofitInstance(){
-        if(retrofit==null){
+    public static Retrofit getRetrofitInstance() {
+        if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
+            // set your desired log level
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(logging);  // <-- this is the important line!
+            builder.addInterceptor(logging);
 
 
-            Interceptor interceptor=new Interceptor() {
+            Interceptor interceptor = new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     okhttp3.Request request = chain.request();
@@ -39,21 +39,15 @@ public class RetrofitClientInstance {
             builder.addInterceptor(interceptor);
 
 
-             retrofit = new Retrofit.Builder()
+            retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                     .client(builder.build())
+                    .client(builder.build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;
 
     }
-    public  static void add(){
 
 
-    }
-
-
-
-    MyApiEndpointInterface endpointInterface=retrofit.create(MyApiEndpointInterface.class);
 }

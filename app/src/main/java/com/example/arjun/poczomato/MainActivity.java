@@ -14,12 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arjun.poczomato.View.CategoryFragment;
 import com.example.arjun.poczomato.View.HomeFragment;
+import com.example.arjun.poczomato.View.NotifyEvent;
 import com.example.arjun.poczomato.View.SearchFragment;
 
-public class MainActivity extends AppCompatActivity implements ToolbarListener
+import org.greenrobot.eventbus.EventBus;
+
+public class MainActivity extends AppCompatActivity implements ActiviyListener
 {
     //8b4934620d60843ab88a5ed9f6199ab0
     private static final String TAG = "Category";
@@ -139,6 +143,17 @@ public class MainActivity extends AppCompatActivity implements ToolbarListener
 
     @Override
     public void onBackPressed() {
+        Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.container);
+        if(fragment instanceof HomeFragment){
+            Toast.makeText(this, "HomeFragment", Toast.LENGTH_SHORT).show();
+
+        }else if(fragment instanceof CategoryFragment){
+            Toast.makeText(this, "CategoryFragment", Toast.LENGTH_SHORT).show();
+
+        }else  if(fragment instanceof SearchFragment) {
+            Toast.makeText(this, "SearchFragment", Toast.LENGTH_SHORT).show();
+        }
+
         if(getFragmentManager().getBackStackEntryCount() > 0)
             getFragmentManager().popBackStack();
         else
@@ -159,5 +174,12 @@ public class MainActivity extends AppCompatActivity implements ToolbarListener
             iv_home.setVisibility(View.GONE);
 
         }
+    }
+
+    @Override
+    public void addfragment(Fragment fragment) {
+        pushfragment(fragment,true);
+
+
     }
 }
