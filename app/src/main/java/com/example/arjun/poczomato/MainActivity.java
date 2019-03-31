@@ -16,12 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.arjun.poczomato.View.CategoryFragment;
+import com.example.arjun.poczomato.View.category.CategoryFragment;
 import com.example.arjun.poczomato.View.HomeFragment;
-import com.example.arjun.poczomato.View.NotifyEvent;
 import com.example.arjun.poczomato.View.SearchFragment;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends AppCompatActivity implements ActiviyListener
 {
@@ -94,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ActiviyListener
                 pushfragment(fragment, false);
                 menuItem.setChecked(true);
                 break;
-            case R.id.menu_review:
+            case R.id.menu_category:
 
                 fragment = CategoryFragment.getnstance();
                 pushfragment(fragment, true);

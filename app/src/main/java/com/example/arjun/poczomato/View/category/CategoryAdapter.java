@@ -1,4 +1,4 @@
-package com.example.arjun.poczomato.View;
+package com.example.arjun.poczomato.View.category;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.arjun.poczomato.R;
+import com.example.arjun.poczomato.View.RecyclerviewCallback;
 import com.example.arjun.poczomato.model.categorie.Category;
 
 import java.util.List;

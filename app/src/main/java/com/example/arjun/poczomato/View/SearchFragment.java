@@ -2,11 +2,14 @@ package com.example.arjun.poczomato.View;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.arjun.poczomato.ActiviyListener;
 import com.example.arjun.poczomato.R;
 
 /**
@@ -19,7 +22,6 @@ public class SearchFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static SearchFragment getInstance() {
 
         Bundle args = new Bundle();
@@ -27,6 +29,13 @@ public class SearchFragment extends Fragment {
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ActiviyListener listener= (ActiviyListener) getActivity();
+        listener.settitle(true,"Search Fragment");
     }
 
     @Override
