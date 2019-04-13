@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.arjun.poczomato.R;
 import com.example.arjun.poczomato.View.RecyclerviewCallback;
-import com.example.arjun.poczomato.model.categorie.Category;
+import com.example.arjun.poczomato.model.Model.category.Category;
 
 import java.util.List;
 

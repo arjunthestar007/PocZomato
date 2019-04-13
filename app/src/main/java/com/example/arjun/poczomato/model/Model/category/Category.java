@@ -1,5 +1,5 @@
 
-package com.example.arjun.poczomato.model.categorie;
+package com.example.arjun.poczomato.model.Model.category;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

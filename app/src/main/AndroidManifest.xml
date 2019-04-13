@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC9PzxiH1j4Z1wV8CmNarhmVu4lElgejec"/>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <activity android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             >
@@ -20,5 +23,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>

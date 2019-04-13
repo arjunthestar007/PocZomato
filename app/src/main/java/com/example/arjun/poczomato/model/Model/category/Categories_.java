@@ -1,9 +1,11 @@
 
-package com.example.arjun.poczomato.model.categorie;
+package com.example.arjun.poczomato.model.Model.category;
+
+import android.arch.persistence.room.Entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity
 public class Categories_ {
 
     @SerializedName("id")

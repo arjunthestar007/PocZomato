@@ -177,6 +177,5 @@ public class MainActivity extends AppCompatActivity implements ActiviyListener
     public void addfragment(Fragment fragment) {
         pushfragment(fragment,true);
 
-
     }
 }

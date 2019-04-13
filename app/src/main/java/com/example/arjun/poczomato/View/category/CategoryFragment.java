@@ -1,6 +1,7 @@
 package com.example.arjun.poczomato.View.category;
 
 
+import android.arch.persistence.room.RoomDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,13 +15,13 @@ import android.view.ViewGroup;
 
 import com.example.arjun.poczomato.R;
 import com.example.arjun.poczomato.ActiviyListener;
-import com.example.arjun.poczomato.View.categorymodel.Datamodel;
+import com.example.arjun.poczomato.DataModel.DatamodelService;
 import com.example.arjun.poczomato.View.NotifyEvent;
 import com.example.arjun.poczomato.View.RecyclerviewCallback;
 import com.example.arjun.poczomato.View.RestaurarantList;
-import com.example.arjun.poczomato.View.categoryviewmodel.Viewmodel;
-import com.example.arjun.poczomato.model.categorie.Categories;
-import com.example.arjun.poczomato.model.categorie.Category;
+import com.example.arjun.poczomato.ViewModel.Viewmodel;
+import com.example.arjun.poczomato.model.Model.category.Categories;
+import com.example.arjun.poczomato.model.Model.category.Category;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -62,7 +63,7 @@ public class CategoryFragment extends Fragment {
 
 
     public void callCategory() {
-        Viewmodel viewmodel = new Viewmodel(new Datamodel());
+        Viewmodel viewmodel = new Viewmodel(new DatamodelService());
         viewmodel.getcategories().subscribe(this::setData);
         Log.d("CAtegory", "callCategory: " + categories);
 
@@ -70,6 +71,8 @@ public class CategoryFragment extends Fragment {
 
     private void setData(Categories categories) {
         categoryList=categories.getCategories();
+//        ZomatoRoomDatabase db = ZomatoRoomDatabase.getDatabase(getActivity());
+//        db.wordDao().insert(categoryList);
         CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), categoryList, new RecyclerviewCallback() {
             @Override
             public void item(View v, int position) {
@@ -82,6 +85,7 @@ public class CategoryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(categoryAdapter);
+
 
     }
     }
