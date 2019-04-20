@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "621786617467",
+    "firebase_url": "https://poczomato-237505.firebaseio.com",
+    "project_id": "poczomato-237505",
+    "storage_bucket": "poczomato-237505.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621786617467:android:e689f9747fbf8b1b",
+        "android_client_info": {
+          "package_name": "com.example.arjun.poczomato"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621786617467-71jk4vhc7bhscf188aaum30gm4jmnnvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPI0di2N9i7uvMi6FwXU7aEDHzwp6GWpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621786617467-71jk4vhc7bhscf188aaum30gm4jmnnvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

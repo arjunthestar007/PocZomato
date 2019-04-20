@@ -37,17 +37,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchFragment extends Fragment implements OnMapReadyCallback {
+public class SearchFragment extends Fragment  implements OnMapReadyCallback{
 
     EditText msearchEdittext;
-    RecyclerView mrecyclerview;
-    SearchAdapter adapter;
+    //RecyclerView mrecyclerview;
+    // SearchAdapter adapter;
     List<Restaurant> reslist;
     Button msearchButton;
     Switch mapSwitch;
     SupportMapFragment mapFragment;
     LinearLayout maplayout;
-    private GoogleMap mMap;
 
     public SearchFragment() {
     }
@@ -73,14 +72,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         msearchEdittext = view.findViewById(R.id.searcheditText);
         msearchButton = view.findViewById(R.id.searchbutton);
-        mrecyclerview = view.findViewById(R.id.searchrecyclerview);
+        //mrecyclerview = view.findViewById(R.id.searchrecyclerview);
         mapSwitch = view.findViewById(R.id.mapswitch);
         maplayout = view.findViewById(R.id.layout);
         //mapFragment=view.findViewById(R.id.mapfragment);
         mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapfragment);
-        mapFragment.getMapAsync(this);
-
         Viewmodel viewmodel = new Viewmodel(new DatamodelService());
 
         msearchButton.setOnClickListener(new View.OnClickListener() {
@@ -108,41 +105,48 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback {
                 int entered = s.toString().length();
                 if (entered > 3) {
                     viewmodel.getRestaurants(s.toString()).subscribe(this::setdata);
-                } else if (entered < 3) {
-                    if (reslist != null)
-                        adapter.clearList();
                 }
+//               else if (entered < 3) {
+//                    if (reslist != null)
+//                        adapter.clearList();
+//                }
 
             }
 
             private void setdata(Search search) {
+
                 reslist = search.getRestaurants();
-                Toast.makeText(getActivity(), "" + search.getResultsFound(), Toast.LENGTH_SHORT).show();
+                registermap();
 
-                if (!mapSwitch.isChecked()) {
-                    maplayout.setVisibility(View.GONE);
-                    adapter = new SearchAdapter(search.getRestaurants(), getActivity(), new RecyclerviewCallback() {
-                        @Override
-                        public void item(View v, int position) {
-                            Restaurant restaurant = reslist.get(position);
-                            Location location = restaurant.getRestaurant().getLocation();
-                            ActiviyListener listener = (ActiviyListener) getActivity();
-                            listener.addfragment(RestaurentFragment.getInstance());
-                        }
-                    });
-                    mrecyclerview.setHasFixedSize(true);
-                    mrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mrecyclerview.setAdapter(adapter);
-                } else {
-                    mrecyclerview.setVisibility(View.GONE);
-                    maplayout.setVisibility(View.VISIBLE);
-
-                }
+               // getlatandlong();
+//                if (!mapSwitch.isChecked()) {
+//                    maplayout.setVisibility(View.GONE);
+//                    adapter = new SearchAdapter(search.getRestaurants(), getActivity(), new RecyclerviewCallback() {
+//                        @Override
+//                        public void item(View v, int position) {
+//                            Restaurant restaurant = reslist.get(position);
+//                            Location location = restaurant.getRestaurant().getLocation();
+//                            ActiviyListener listener = (ActiviyListener) getActivity();
+//                            listener.addfragment(RestaurentFragment.getInstance());
+//                        }
+//                    });
+//                    mrecyclerview.setHasFixedSize(true);
+//                    mrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                    mrecyclerview.setAdapter(adapter);
+//                } else {
+//                    mrecyclerview.setVisibility(View.GONE);
+//                    maplayout.setVisibility(View.VISIBLE);
+//
+//                }
             }
         });
 
 
         return view;
+    }
+
+    void registermap(){
+        mapFragment.getMapAsync(this);
     }
 
     private void filter(String text) {
@@ -159,17 +163,28 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback {
         }
 
         //calling a method of the adapter class and passing the filtered list
-        adapter.filterList(filterdNames);
+        // adapter.filterList(filterdNames);
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
+        if(reslist!=null){
+
+            for (Restaurant restaurant : reslist) {
+                Location loc = restaurant.getRestaurant().getLocation();
+                loc.getLatitude();
+                loc.getLatitude();
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(Double.parseDouble(loc.getLatitude()), Double.parseDouble(loc.getLongitude())))
+                        .title(loc.getAddress()));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(loc.getLatitude()), Double.parseDouble(loc.getLongitude())), 10));
+            }
+
+        }
+
     }
 }
