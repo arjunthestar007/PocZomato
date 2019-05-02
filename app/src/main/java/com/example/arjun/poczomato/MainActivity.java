@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements ActiviyListener
         setSupportActionBar(toolbar);
         actionbar = getSupportActionBar();
 
+        //
+        MyAppilication myAppilication= (MyAppilication) getApplicationContext();
+
+        Toast.makeText(this, ""+myAppilication.getUsername(), Toast.LENGTH_SHORT).show();
+
         iv_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

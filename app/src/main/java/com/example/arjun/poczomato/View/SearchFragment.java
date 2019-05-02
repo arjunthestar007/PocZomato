@@ -1,9 +1,12 @@
 package com.example.arjun.poczomato.View;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,11 +28,17 @@ import com.example.arjun.poczomato.ViewModel.Viewmodel;
 import com.example.arjun.poczomato.model.Model.search.Location;
 import com.example.arjun.poczomato.model.Model.search.Restaurant;
 import com.example.arjun.poczomato.model.Model.search.Search;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -39,6 +48,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment  implements OnMapReadyCallback{
 
+    private static final int REQUEST_LOCATION_PERMISSION =1000 ;
     EditText msearchEdittext;
     //RecyclerView mrecyclerview;
     // SearchAdapter adapter;
@@ -47,6 +57,12 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
     Switch mapSwitch;
     SupportMapFragment mapFragment;
     LinearLayout maplayout;
+    private boolean mTrackingLocation;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
+    GoogleMap mGoogleMap;
+    android.location.Location  mlocation;
 
     public SearchFragment() {
     }
@@ -78,6 +94,10 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
         //mapFragment=view.findViewById(R.id.mapfragment);
         mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapfragment);
+        // Initialize the FusedLocationClient.
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
+                getActivity());
+
         Viewmodel viewmodel = new Viewmodel(new DatamodelService());
 
         msearchButton.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +109,7 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
             }
 
         });
+
         msearchEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -141,7 +162,22 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
             }
         });
 
+        mLocationCallback = new LocationCallback() {
+            /**
+             * This is the callback that is triggered when the
+             * FusedLocationClient updates your location.
+             * @param locationResult The result containing the device location.
+             */
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (mTrackingLocation) {
+                    mlocation=locationResult.getLastLocation();
 
+
+                }
+            }
+        };
+        startTrackingLocation();
         return view;
     }
 
@@ -169,9 +205,12 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap=googleMap;
 
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(mlocation.getLatitude(), mlocation.getLongitude())).title("my current location")
 
-
+        );
         if(reslist!=null){
 
             for (Restaurant restaurant : reslist) {
@@ -187,4 +226,49 @@ public class SearchFragment extends Fragment  implements OnMapReadyCallback{
         }
 
     }
+
+    private void startTrackingLocation() {
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]
+                            {Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        } else {
+            mTrackingLocation = true;
+            mFusedLocationClient.requestLocationUpdates
+                    (getLocationRequest(),
+                            mLocationCallback,
+                            null /* Looper */);
+
+
+        }
+    }
+
+    private LocationRequest getLocationRequest() {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return locationRequest;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION:
+
+                // If the permission is granted, get the location, otherwise,
+                // show a Toast
+                if (grantResults.length > 0
+                        && grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED) {
+                    startTrackingLocation();
+                } else {
+                    Toast.makeText(getActivity(),
+                            "location_permission_denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }    }
 }
